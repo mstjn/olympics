@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { getOlympics } from "../api/api";
 
-export const useOlympics = () => {
+export const useData = () => {
   return useQuery({
     queryKey: ["olympics"],
     queryFn: getOlympics,

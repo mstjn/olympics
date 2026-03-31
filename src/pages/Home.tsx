@@ -2,13 +2,13 @@ import { type FC } from "react";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend, CategoryScale, LinearScale, BarElement, LineElement, PointElement } from "chart.js";
 import { Pie } from "react-chartjs-2";
 import Indicator from "../components/Indicator";
-import { useOlympics } from "../lib/useOlympics";
+import { useData } from "../hooks/useData";
 import { buildOlympicsChartData } from "../lib/chartsData";
 
 ChartJS.register(ArcElement, Tooltip, Legend, CategoryScale, LinearScale, BarElement, LineElement, PointElement);
 
 const Home: FC = () => {
-  const { data, isLoading, error } = useOlympics();
+  const { data, isLoading, error } = useData();
   if (isLoading) return <div>Chargement...</div>;
   if (error) return <div>Erreur : {error.message}</div>;
   if (!data) return <div>Aucune donnée</div>;

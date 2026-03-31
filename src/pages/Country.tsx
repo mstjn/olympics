@@ -1,18 +1,18 @@
 import type { FC } from "react";
 import { useParams } from "react-router-dom";
-import type { Country, Participation } from "../types";
+import type { Olympic, Participation } from "../types";
 import Indicator from "../components/Indicator";
 import { Line } from "react-chartjs-2";
 import { chartEvolutionData } from "../lib/chartsData";
 
 interface CountryProps {
-  olympicsData: Country[];
+  olympicsData: Olympic[];
 }
 
 const Country: FC<CountryProps> = ({ olympicsData }) => {
   const { id } = useParams();
 
-  const country = olympicsData.find((c: Country) => c.id === Number(id));
+  const country = olympicsData.find((c: Olympic) => c.id === Number(id));
 
   if (!country) {
     return <div>Pays non trouvé, erreur 404</div>;

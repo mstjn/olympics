@@ -1,6 +1,6 @@
-import type { Participation, Country } from "../types";
+import type { Participation, Olympic } from "../types";
 
-export function chartEvolutionData(country: Country) {
+export function chartEvolutionData(country: Olympic) {
   const evolutionData = {
     labels: country.participations.map((p: Participation) => p.year.toString()),
     datasets: [
@@ -48,8 +48,8 @@ export function chartEvolutionData(country: Country) {
   return { evolutionData, evolutionOptions };
 }
 
-export function buildOlympicsChartData(data: Country[]) {
-  const calculateTotalMedals = (country: Country) => {
+export function buildOlympicsChartData(data: Olympic[]) {
+  const calculateTotalMedals = (country: Olympic) => {
     return country.participations.reduce((sum: number, p: Participation) => sum + p.medalsCount, 0);
   };
 
@@ -57,11 +57,11 @@ export function buildOlympicsChartData(data: Country[]) {
   const totalGamesEditions = 5;
 
   const chartData = {
-    labels: data.map((d: Country) => d.name),
+    labels: data.map((d: Olympic) => d.name),
     datasets: [
       {
         label: "Total des médailles",
-        data: data.map((d: Country) => calculateTotalMedals(d)),
+        data: data.map((d: Olympic) => calculateTotalMedals(d)),
         backgroundColor: [
           "rgba(255, 99, 132, 0.6)",
           "rgba(54, 162, 235, 0.6)",

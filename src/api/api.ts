@@ -1,5 +1,5 @@
 import data from "./olympics.mock.json"
-import type { Country } from "../types"
-export function getOlympics() : Country[] {
+import type { Olympic } from "../types"
+export function getOlympics() : Olympic[] {
     return data
 }
