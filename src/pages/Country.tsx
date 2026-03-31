@@ -4,24 +4,22 @@ import type { Olympic, Participation } from "../types";
 import Indicator from "../components/Indicator";
 import { Line } from "react-chartjs-2";
 import { chartEvolutionData } from "../lib/chartsData";
+import { useData } from "../hooks/useData";
 
-interface CountryProps {
-  olympicsData: Olympic[];
-}
-
-const Country: FC<CountryProps> = ({ olympicsData }) => {
+const Country: FC = () => {
   const { id } = useParams();
+  const { data, isLoading, error } = useData();
+  if (isLoading) return <div>Chargement...</div>;
+  if (error) return <div>Erreur : {error.message}</div>;
+  if (!data) return <div>Aucune donnée</div>;
 
-  const country = olympicsData.find((c: Olympic) => c.id === Number(id));
-
-  if (!country) {
-    return <div>Pays non trouvé, erreur 404</div>;
-  }
+  const country = data.find((c: Olympic) => c.id === Number(id));
+  if (!country) return <div>Pays non trouvé</div>;
 
   const totalMedals = country.participations.reduce((sum: number, p: Participation) => sum + p.medalsCount, 0);
   const totalAthletes = country.participations.reduce((sum: number, p: Participation) => sum + p.athleteCount, 0);
   const totalParticipations = country.participations.length;
-  const {evolutionData, evolutionOptions} = chartEvolutionData(country)
+  const { evolutionData, evolutionOptions } = chartEvolutionData(country);
 
   return (
     <div className="min-h-screen bg-gray-900 text-white p-8">

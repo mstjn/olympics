@@ -1,4 +1,5 @@
 import type { Participation, Olympic } from "../types";
+import type { ActiveElement, ChartEvent } from "chart.js";
 
 export function chartEvolutionData(country: Olympic) {
   const evolutionData = {
@@ -48,7 +49,7 @@ export function chartEvolutionData(country: Olympic) {
   return { evolutionData, evolutionOptions };
 }
 
-export function buildOlympicsChartData(data: Olympic[]) {
+export function buildOlympicsChartData(data: Olympic[], navigate: (path: string) => void) {
   const calculateTotalMedals = (country: Olympic) => {
     return country.participations.reduce((sum: number, p: Participation) => sum + p.medalsCount, 0);
   };
@@ -77,6 +78,10 @@ export function buildOlympicsChartData(data: Olympic[]) {
 
   const chartOptions = {
     responsive: true,
+    onClick: (_event: ChartEvent, elements: ActiveElement[]) => {
+      if (elements.length === 0) return;
+      navigate(`/${data[elements[0].index].id}`);
+    },
     maintainAspectRatio: false,
     plugins: {
       legend: {

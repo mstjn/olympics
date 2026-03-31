@@ -4,15 +4,17 @@ import { Pie } from "react-chartjs-2";
 import Indicator from "../components/Indicator";
 import { useData } from "../hooks/useData";
 import { buildOlympicsChartData } from "../lib/chartsData";
+import { useNavigate } from "react-router-dom";
 
 ChartJS.register(ArcElement, Tooltip, Legend, CategoryScale, LinearScale, BarElement, LineElement, PointElement);
 
 const Home: FC = () => {
   const { data, isLoading, error } = useData();
+  const navigate = useNavigate()
   if (isLoading) return <div>Chargement...</div>;
   if (error) return <div>Erreur : {error.message}</div>;
   if (!data) return <div>Aucune donnée</div>;
-  const { totalParticipatingCountries, totalGamesEditions, chartData, chartOptions } = buildOlympicsChartData(data);
+  const { totalParticipatingCountries, totalGamesEditions, chartData, chartOptions } = buildOlympicsChartData(data, navigate);
 
   return (
     <div className="min-h-screen bg-gray-900 text-white p-8">
