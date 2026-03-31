@@ -12,6 +12,7 @@
   "dependencies": {
     "@fontsource-variable/inter": "^5.2.8",
     "@tailwindcss/vite": "^4.1.18",
+    "@tanstack/react-query": "^5.96.0",
     "chart.js": "^4.4.1",
     "react": "^19.2.0",
     "react-chartjs-2": "^5.2.0",

@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import type { Country, Participation } from "../types";
 import Indicator from "../components/Indicator";
 import { Line } from "react-chartjs-2";
-import { chartsData } from "../lib/chartsData";
+import { chartEvolutionData } from "../lib/chartsData";
 
 interface CountryProps {
   olympicsData: Country[];
@@ -21,7 +21,7 @@ const Country: FC<CountryProps> = ({ olympicsData }) => {
   const totalMedals = country.participations.reduce((sum: number, p: Participation) => sum + p.medalsCount, 0);
   const totalAthletes = country.participations.reduce((sum: number, p: Participation) => sum + p.athleteCount, 0);
   const totalParticipations = country.participations.length;
-  const {evolutionData, evolutionOptions} = chartsData(country)
+  const {evolutionData, evolutionOptions} = chartEvolutionData(country)
 
   return (
     <div className="min-h-screen bg-gray-900 text-white p-8">
