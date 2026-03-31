@@ -4,7 +4,7 @@ name : string,
 participations : Participation[]
 }
 
-export type Participation = {
+export interface Participation {
     id : number,
     year: number,
     city: string,

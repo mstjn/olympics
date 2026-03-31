@@ -64,15 +64,25 @@ npm run lint
 p2-dfsjs/
 ├── public/              # Static public assets
 ├── src/
-│   ├── App.tsx         # Main application component
-│   ├── main.tsx        # React entry point
-│   └── index.css       # Global styles
+│   ├── api/
+│   │   ├── api.ts               # Data fetching functions
+│   │   └── olympics.mock.json   # Mock data
+│   ├── components/
+│   │   └── Indicator.tsx        # Reusable stat indicator component
+│   ├── hooks/
+│   │   └── useData.ts           # Custom hook for fetching olympics data
+│   ├── lib/
+│   │   └── chartsData.ts        # Chart data preparation utilities
+│   ├── pages/
+│   │   ├── Home.tsx             # Dashboard page with pie chart
+│   │   └── Country.tsx          # Country detail page with line chart
+│   ├── types.ts                 # TypeScript type definitions
+│   ├── main.tsx                 # React entry point & routing
+│   └── index.css                # Global styles
 ├── index.html          # Main HTML page
 ├── package.json        # Project dependencies
 ├── tsconfig.json       # TypeScript configuration
-├── vite.config.ts      # Vite configuration
-├── tailwind.config.js  # Tailwind CSS configuration
-└── .eslintrc.cjs       # ESLint configuration
+└── vite.config.ts      # Vite configuration
 ```
 
 ## 🔧 Tech Stack
@@ -83,6 +93,7 @@ p2-dfsjs/
 - **Tailwind CSS 4** - Utility-first CSS framework
 - **React Router 6** - Client-side routing
 - **Chart.js** - Interactive data visualization
+- **TanStack Query** - Async data fetching and caching
 - **ESLint** - Code quality and consistency
 
 ## 📊 Data
