@@ -1,10 +1,9 @@
 import { useState, useEffect, type FC } from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend, CategoryScale, LinearScale, BarElement, LineElement, PointElement } from "chart.js";
 import { Pie } from "react-chartjs-2";
-import { getOlympics } from "./api/api";
-import type { Country, Participation } from "./types";
-import Indicator from "./components/Indicator";
+import { getOlympics } from "../api/api";
+import type { Country, Participation } from "../types";
+import Indicator from "../components/Indicator";
 
 ChartJS.register(ArcElement, Tooltip, Legend, CategoryScale, LinearScale, BarElement, LineElement, PointElement);
 
@@ -96,13 +95,5 @@ const Home: FC = () => {
   );
 };
 
-// Anti-pattern 11 — Routing dans App.tsx — idéalement : module dédié.
-export const App: FC = () => {
-  return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Home />} />
-      </Routes>
-    </BrowserRouter>
-  );
-};
+export default Home
+
