@@ -1,16 +1,70 @@
 import type { Participation, Olympic } from "../types";
-import type { ActiveElement, ChartEvent } from "chart.js";
+import type { ActiveElement, ChartEvent, Plugin } from "chart.js";
+
+const outlabelsPlugin: Plugin<"pie"> = {
+  id: "outlabels",
+  afterDraw(chart) {
+    const ctx = chart.ctx;
+    const meta = chart.getDatasetMeta(0);
+    const labels = chart.data.labels as string[];
+
+    const colors = chart.data.datasets[0].borderColor as string[];
+
+    meta.data.forEach((arc, i) => {
+      const { startAngle, endAngle, outerRadius, x, y } = arc.getProps(
+        ["startAngle", "endAngle", "outerRadius", "x", "y"],
+        true
+      );
+
+      const midAngle = (startAngle + endAngle) / 2;
+      const cosA = Math.cos(midAngle);
+      const sinA = Math.sin(midAngle);
+
+      const x1 = x + cosA * outerRadius;
+      const y1 = y + sinA * outerRadius;
+      const x2 = x1 + (cosA >= 0 ? 80 : -80);
+
+      ctx.save();
+      ctx.strokeStyle = colors[i];
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.moveTo(x1, y1);
+      ctx.lineTo(x2, y1);
+      ctx.stroke();
+
+      ctx.fillStyle = "black";
+      ctx.font = "bold 14px Inter, sans-serif";
+      ctx.textAlign = cosA >= 0 ? "left" : "right";
+      ctx.textBaseline = "middle";
+      const textX = x2 + (cosA >= 0 ? 4 : -4);
+      const padding = 4;
+      const textWidth = ctx.measureText(labels[i]).width;
+      ctx.fillStyle = "white";
+      ctx.fillRect(
+        cosA >= 0 ? textX - padding : textX - textWidth - padding,
+        y1 - 9,
+        textWidth + padding * 2,
+        18
+      );
+      ctx.fillStyle = "black";
+      ctx.fillText(labels[i], textX, y1);
+      ctx.restore();
+    });
+  },
+};
 
 export function chartEvolutionData(country: Olympic) {
+  const sorted = [...country.participations].sort((a, b) => a.year - b.year);
+
   const evolutionData = {
-    labels: country.participations.map((p: Participation) => p.year.toString()),
+    labels: sorted.map((p: Participation) => p.year.toString()),
     datasets: [
       {
         label: "Nombre de médailles",
-        data: country.participations.map((p: Participation) => p.medalsCount),
+        data: sorted.map((p: Participation) => p.medalsCount),
         borderColor: "rgb(75, 192, 192)",
         backgroundColor: "rgba(75, 192, 192, 0.2)",
-        tension: 0.3,
+        tension: 0,
       },
     ],
   };
@@ -20,27 +74,33 @@ export function chartEvolutionData(country: Olympic) {
     maintainAspectRatio: false,
     plugins: {
       legend: {
-        position: "top" as const,
-        labels: {
-          color: "white",
-        },
+        display: false,
       },
     },
     scales: {
       y: {
         ticks: {
-          color: "white",
+          color: "#374151",
         },
         grid: {
-          color: "rgba(255, 255, 255, 0.1)",
+          color: "rgba(0, 0, 0, 0.08)",
+        },
+        border: {
+          display: false,
         },
       },
       x: {
         ticks: {
-          color: "white",
+          color: "#374151",
         },
         grid: {
-          color: "rgba(255, 255, 255, 0.1)",
+          color: "rgba(0, 0, 0, 0.08)",
+        },
+        title: {
+          display: true,
+          text: "Dates",
+          color: "#374151",
+          font: { size: 14 },
         },
       },
     },
@@ -64,13 +124,19 @@ export function buildOlympicsChartData(data: Olympic[], navigate: (path: string)
         label: "Total des médailles",
         data: data.map((d: Olympic) => calculateTotalMedals(d)),
         backgroundColor: [
-          "rgba(255, 99, 132, 0.6)",
-          "rgba(54, 162, 235, 0.6)",
-          "rgba(255, 206, 86, 0.6)",
-          "rgba(75, 192, 192, 0.6)",
-          "rgba(153, 102, 255, 0.6)",
+          "rgba(180, 30, 60, 0.85)",
+          "rgba(30, 100, 190, 0.85)",
+          "rgba(200, 140, 0, 0.85)",
+          "rgba(20, 140, 140, 0.85)",
+          "rgba(110, 50, 200, 0.85)",
         ],
-        borderColor: ["rgba(255, 99, 132, 1)", "rgba(54, 162, 235, 1)", "rgba(255, 206, 86, 1)", "rgba(75, 192, 192, 1)", "rgba(153, 102, 255, 1)"],
+        borderColor: [
+          "rgb(140, 20, 45)",
+          "rgb(20, 75, 150)",
+          "rgb(160, 110, 0)",
+          "rgb(15, 105, 105)",
+          "rgb(80, 30, 160)",
+        ],
         borderWidth: 1,
       },
     ],
@@ -83,15 +149,15 @@ export function buildOlympicsChartData(data: Olympic[], navigate: (path: string)
       navigate(`/${data[elements[0].index].id}`);
     },
     maintainAspectRatio: false,
+    layout: {
+      padding: 80,
+    },
     plugins: {
       legend: {
-        position: "bottom" as const,
-        labels: {
-          color: "white",
-        },
+        display: false,
       },
     },
   };
 
-  return { chartData, chartOptions, totalGamesEditions, totalParticipatingCountries };
+  return { chartData, chartOptions, totalGamesEditions, totalParticipatingCountries, outlabelsPlugin };
 }

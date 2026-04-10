@@ -10,36 +10,36 @@ ChartJS.register(ArcElement, Tooltip, Legend, CategoryScale, LinearScale, BarEle
 
 const Home: FC = () => {
   const { data, isLoading, error } = useData();
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   if (isLoading) return <div>Chargement...</div>;
   if (error) return <div>Erreur : {error.message}</div>;
   if (!data) return <div>Aucune donnée</div>;
-  const { totalParticipatingCountries, totalGamesEditions, chartData, chartOptions } = buildOlympicsChartData(data, navigate);
+  const { totalParticipatingCountries, totalGamesEditions, chartData, chartOptions, outlabelsPlugin } = buildOlympicsChartData(data, navigate);
 
   return (
-    <div className="min-h-screen bg-gray-900 text-white p-8">
+    <div className="min-h-screen text-black p-4 md:p-8">
       <div className="max-w-6xl mx-auto">
-        <h1 className="text-4xl font-bold mb-8">Historique des Jeux Olympiques - TéléSport</h1>
+        <h1 className="text-2xl md:text-4xl font-bold mb-6">Historique des Jeux Olympiques - TéléSport</h1>
 
-        <div className="mb-8">
-          <p className="text-lg">
+        <div className="mb-6">
+          <p className="text-base md:text-lg">
             Bienvenue sur la page dédiée à l'historique des Jeux Olympiques. Explorez les performances des pays au fil des années.
           </p>
         </div>
 
-        <div className="mb-2">
+        <div className="flex justify-center mb-5">
+          <h2 className="text-white bg-teal-600 px-6 py-2 rounded-lg text-xl md:text-2xl font-light">Medailles par Pays</h2>
+        </div>
+
+        <div className="flex flex-wrap justify-center gap-4 md:gap-10 mb-2">
           <Indicator total={totalParticipatingCountries} text={"Pays participants"} />
-          <Indicator total={totalGamesEditions} text={"Éditions des JO"} color={true} />
+          <Indicator total={totalGamesEditions} text={"Éditions des JO"} />
         </div>
 
-        <div className="bg-gray-800 p-8 rounded-lg shadow-xl">
-          <div style={{ height: "400px" }}>
-            <Pie data={chartData} options={chartOptions} />
+        <div className="bg-white p-4 md:p-8 rounded-lg">
+          <div className="h-64 sm:h-96">
+            <Pie data={chartData} options={chartOptions} plugins={[outlabelsPlugin]} />
           </div>
-        </div>
-
-        <div className="text-sm text-gray-400">
-          <p>Cliquez sur un pays pour voir ses détails</p>
         </div>
       </div>
     </div>
